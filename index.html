@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para o Meu Amor ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta de cores mais vibrante e moderna */
+            --gradient-start: #ffdde1; /* Rosa claro vibrante */
+            --gradient-end: #ee9ca7;    /* Rosa escuro vibrante */
+            --card-bg-rgba: rgba(255, 255, 255, 0.15); /* Fundo do container com transparência */
+            --text-color: #fff;         /* Texto branco para contraste com o fundo */
+            --accent-color: #FF1493;    /* Rosa profundo para destaques (Deep Pink) */
+            --heart-color: #FF6347;     /* Vermelho Tomate - para corações */
+            --border-color-card: rgba(255, 255, 255, 0.3); /* Borda mais suave para o container */
+            --photo-border: rgba(255, 255, 255, 0.5); /* Borda das fotos */
+            --shadow-color: rgba(0, 0, 0, 0.2); /* Sombra para elementos */
+            --caption-bg: rgba(0, 0, 0, 0.6); /* Fundo da legenda da foto */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif; /* Fonte moderna e limpa */
+            background: linear-gradient(to bottom right, var(--gradient-start), var(--gradient-end)); /* Gradiente do exemplo */
+            color: var(--text-color);
+            text-align: center;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+            position: relative;
+        }
+
+        /* Efeito de corações caindo (ajustado para o novo estilo) */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Atrás do conteúdo principal */
+            overflow: hidden; /* Garante que os corações não saiam da tela */
+        }
+
+        .heart {
+            position: absolute;
+            background-color: var(--heart-color);
+            transform: rotate(-45deg);
+            animation: fall linear infinite;
+            border-radius: 50% 50% 0 0;
+            opacity: 0.8; /* Um pouco mais opaco para visibilidade */
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* Um leve brilho */
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 50%;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(-45deg) scale(0.6); opacity: 0.8; }
+            100% { transform: translateY(100vh) rotate(315deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 50px 30px;
+            background-color: var(--card-bg-rgba);
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color-card);
+            box-shadow: 0 15px 30px var(--shadow-color);
+            position: relative;
+            z-index: 2;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 4em;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
+        }
+
+        .heart-icon {
+            color: var(--accent-color);
+            font-size: 1.1em;
+            vertical-align: middle;
+        }
+
+        .text {
+            font-size: 1.25em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-bottom: 40px;
+            text-align: justify;
+            padding: 0 15px;
+        }
+        
+        .text p {
+            margin-bottom: 0.8em;
+        }
+        .text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-style: italic;
+            opacity: 0.9;
+            font-size: 1.1em;
+            color: var(--text-color);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 35px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .photos img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 4px solid var(--photo-border);
+            box-shadow: 0 8px 18px var(--shadow-color);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photos img:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+
+        /* Modal para abrir imagens */
+        .modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Importante para o swipe */
+            background-color: rgba(0,0,0,0.85); /* Fundo mais escuro para contraste */
+            backdrop-filter: blur(10px); /* Blur mais forte */
+            animation: fadeIn 0.3s forwards;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 0; /* Remove padding do topo para centralizar melhor */
+        }
+
+        .modal-content-wrapper {
+            position: relative; /* Para posicionar a legenda e botões */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 90%;
+            max-height: 90vh; /* Ajustado para deixar um pouco mais de espaço */
+            overflow: hidden; /* ESSENCIAL PARA A TRANSIÇÃO DE SLIDE */
+            border-radius: 15px; /* Manter o border-radius no wrapper */
+        }
+
+        /* Container para as imagens dentro do modal para a transição */
+        .modal-image-container {
+            display: flex;
+            transition: transform 0.4s ease-in-out; /* A transição real acontece aqui */
+            height: 100%;
+        }
+
+        .modal-image {
+            display: block;
+            flex-shrink: 0; /* Impede que a imagem encolha */
+            width: 100%; /* Ocupa 100% da largura do contêiner flex */
+            height: 100%; /* Ocupa 100% da altura do contêiner flex */
+            object-fit: contain;
+            border-radius: 15px; /* Bordas arredondadas para a imagem */
+            border: 5px solid rgba(255, 255, 255, 0.8); /* Borda mais visível */
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9); /* Sombra mais intensa */
+            /* Remover transition aqui, pois a transição será no modal-image-container */
+        }
+        
+        /* Estilo para o texto (caption) da foto no modal */
+        #caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--caption-bg); /* Fundo semitransparente */
+            color: #fff;
+            font-family: 'Montserrat', sans-serif; /* Fonte para a legenda */
+            font-size: 1.1em; /* Tamanho da fonte */
+            line-height: 1.4;
+            padding: 15px 20px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            text-align: center;
+            box-sizing: border-box;
+            opacity: 1; /* Sempre visível quando a imagem está aberta */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            font-weight: 500;
+            z-index: 102; /* Garante que a legenda fique acima dos botões se houver conflito */
+        }
+
+        /* Botões de navegação no modal */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%); /* Centraliza verticalmente */
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            transition: 0.6s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: rgba(0,0,0,0.5); /* Fundo semitransparente */
+            z-index: 103; /* Acima da legenda e imagem */
+        }
+
+        .prev {
+            left: 0;
+            border-radius: 0 3px 3px 0; /* Arredondamento apenas do lado certo */
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px; /* Arredondamento apenas do lado certo */
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+            color: var(--accent-color);
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #fff;
+            font-size: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 104; /* O mais alto */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Botão para música (opcional) */
+        .music-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 40px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .music-button:hover {
+            background-color: #FF007F;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 40px 20px;
+                border-radius: 20px;
+            }
+            h1 {
+                font-size: 3em;
+            }
+            .text {
+                font-size: 1.1em;
+                line-height: 1.7;
+            }
+            .text p {
+                margin-bottom: 0.6em; 
+            }
+            .photos {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 25px;
+            }
+            .photos img {
+                height: 160px;
+            }
+            .modal-content-wrapper {
+                max-width: 95%;
+                max-height: 85vh;
+            }
+            #caption {
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+            .close {
+                font-size: 40px;
+                right: 25px;
+            }
+            .prev, .next {
+                font-size: 24px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 15px;
+                margin: 15px auto;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            .text {
+                font-size: 1em;
+                line-height: 1.6;
+                padding: 0 10px;
+            }
+            .text p {
+                margin-bottom: 0.5em; 
+            }
+            .photos {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .photos img {
+                height: 220px;
+            }
+            .music-button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+            #caption {
+                font-size: 0.9em;
+                padding: 8px 10px;
+            }
+            .prev, .next {
+                font-size: 20px;
+                padding: 8px;
+            }
+            .close {
+                font-size: 35px;
+                right: 15px;
+                top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container"></div>
+
+    <div class="container">
+        <h1>Para a Vitória meu Amor <span class="heart-icon">❤️</span></h1>
+
+        <div class="text">
+            <p>
+                Meu amor,
+
+                Mais um Dia dos Namorados passou, e meu coração transborda de alegria por ter você ao meu lado. Lembro-me de cada momento que passamos juntos, cada risada, cada abraço, cada olhar. Você trouxe uma luz para a minha vida que eu nem sabia que faltava.
+            </p>
+            <p>
+                Com você, aprendi o verdadeiro significado de amar e ser amado. Sua paciência, seu carinho e seu companheirismo me fazem uma pessoa melhor a cada dia. Sou grato(a) por cada sacrifício, cada apoio e por cada vez que você me fez sorrir, mesmo quando as coisas pareciam difíceis.
+            </p>
+            <p>
+                Que o nosso amor continue crescendo e se fortalecendo, superando todos os desafios. Mal posso esperar para criar muitas outras memórias incríveis ao seu lado. Você é a minha pessoa favorita no mundo inteiro!
+            </p>
+        </div>
+        <div class="footer">
+            Com todo o meu amor,<br> Brayan Andrew 💌
+        </div>
+
+        <div class="photos">
+            <img src="foto1.jpg" alt="Aconchego e amor" data-caption="Seu abraço é o meu lugar de paz, meu amor.">
+            <img src="foto2.jpg" alt="Aquele pôr do sol inesquecível" data-caption="Um pôr do sol mágico, mas o seu sorriso sempre será o meu favorito.">
+            <img src="foto3.jpg" alt="Família" data-caption="Os dois maiores amores da minha vida em uma só foto. Meu coração transborda de gratidão por vocês.">
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content-wrapper">
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <div class="modal-image-container" id="modalImageContainer">
+            </div>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            <div id="caption"></div> 
+        </div> 
+    </div>
+
+    <script>
+        // Script para geração e animação dos corações
+        const heartsContainer = document.querySelector('.hearts-container');
+        const numHearts = 60; 
+
+        for (let i = 0; i < numHearts; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            const size = Math.random() * 20 + 15; 
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (8 + Math.random() * 7) + 's';
+            heart.style.animationDelay = (Math.random() * 8) + 's';
+            heartsContainer.appendChild(heart);
+        }
+
+        // --- Script para o Modal com Navegação e Legenda ---
+        var modal = document.getElementById("myModal");
+        var modalImageContainer = document.getElementById("modalImageContainer"); // Novo container para as imagens
+        var captionText = document.getElementById("caption");
+        var images = document.querySelectorAll(".photos img");
+        var currentSlideIndex = 0; // Índice da foto atualmente exibida
+
+        function openModal(index) {
+            modal.style.display = "flex";
+            currentSlideIndex = index;
+            createModalImages(); // Cria as imagens no modal
+            showSlide(currentSlideIndex); // Exibe a imagem correta
+        }
+
+        // Função para criar todas as imagens no modal de uma vez para o efeito de slide
+        function createModalImages() {
+            modalImageContainer.innerHTML = ''; // Clear existing images
+            images.forEach(img => {
+                const newImg = document.createElement('img');
+                newImg.src = img.src;
+                newImg.alt = img.alt;
+                newImg.className = 'modal-image';
+                modalImageContainer.appendChild(newImg);
+            });
+        }
+
+        // Função principal para exibir a foto com transição
+        function showSlide(index) {
+            if (index >= images.length) { 
+                currentSlideIndex = 0; // Volta para a primeira foto se for além do final
+            } else if (index < 0) {
+                currentSlideIndex = images.length - 1; // Vai para a última foto se for antes do início
+            }
+
+            // Move o container de imagens para mostrar a imagem correta
+            const translateX = -currentSlideIndex * 100;
+            modalImageContainer.style.transform = `translateX(${translateX}%)`;
+
+            // Atualiza a legenda
+            captionText.innerHTML = images[currentSlideIndex].getAttribute('data-caption');
+        }
+
+        function plusSlides(n) {
+            showSlide(currentSlideIndex += n);
+        }
+
+        // Event listener para abrir o modal ao clicar na imagem
+        images.forEach((img, index) => {
+            img.onclick = function(){
+                openModal(index);
+            }
+        });
+
+        // Fechar modal ao clicar no 'X' ou fora da imagem
+        var closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        modal.onclick = function(event) {
+            // Fecha o modal apenas se o clique for no fundo escuro, não na imagem ou texto, nem nos botões
+            if (event.target == modal) { 
+                modal.style.display = "none";
+            }
+        }
+
+        // Navegação pelo teclado (setas esquerda/direita)
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === "flex") { // Apenas se o modal estiver aberto
+                if (e.key === "ArrowLeft") {
+                    plusSlides(-1);
+                } else if (e.key === "ArrowRight") {
+                    plusSlides(1);
+                } else if (e.key === "Escape") { // Fecha com a tecla ESC
+                    modal.style.display = "none";
+                }
+            }
+        });
+
+        // --- Navegação por Swipe (Celular) ---
+        var touchStartX = 0;
+        var touchEndX = 0;
+        const minSwipeDistance = 50; // Distância mínima para considerar um swipe
+
+        // Adiciona listeners de toque ao modalImageContainer para capturar o swipe diretamente na área da imagem
+        modalImageContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        modalImageContainer.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+        
+        function handleSwipe() {
+            if (modal.style.display === "flex") { // Apenas se o modal estiver aberto
+                if (touchEndX < touchStartX - minSwipeDistance) { // Swipe para a esquerda
+                    plusSlides(1); // Mudar para a próxima (slide para a esquerda)
+                } else if (touchEndX > touchStartX + minSwipeDistance) { // Swipe para a direita
+                    plusSlides(-1); // Mudar para a anterior (slide para a direita)
+                }
+            }
+        }
+
+        // Função para tocar/pausar música (opcional)
+        // Lembre-se de descomentar o botão e a tag <audio> no HTML se for usar.
+        // function toggleMusic() {
+        //     const music = document.getElementById('background-music');
+        //     if (music.paused) {
+        //         music.play();
+        //     } else {
+        //         music.pause();
+        //     }
+        // }
+    </script>
+</body>
+</html>
